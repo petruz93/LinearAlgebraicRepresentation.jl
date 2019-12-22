@@ -354,7 +354,7 @@ julia> GL.VIEW([
 """
 function cuboid(maxpoint::Array, full=false,
 				minpoint::Array=zeros(length(maxpoint)))
-	@assert( length(minpoint) == length(maxpoint) )
+	(length(minpoint) == length(maxpoint)) || throw(ArgumentError("cuboid: invalid length of minpoint"))
 	dim = length(minpoint)
 	shape = ones(Int, dim)
 	cell = cuboidGrid(shape, full)

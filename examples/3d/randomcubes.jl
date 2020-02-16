@@ -1,6 +1,5 @@
-using LinearAlgebraicRepresentation
+using LinearAlgebraicRepresentation, LinearAlgebra, ViewerGL
 Lar = LinearAlgebraicRepresentation
-using ViewerGL
 GL = ViewerGL
 
 #include("")
@@ -8,15 +7,20 @@ store = []
 scaling = .85
 V,(VV,EV,FV,CV) = Lar.cuboid([0.25,0.25,0.25],true,[-0.25,-0.25,-0.25])
 mybox = (V,CV,FV,EV)
-for k=1:15
-	size = rand()*scaling
-	scale = Lar.s(size,size,size)
+for k=1:10
+	dim = rand()*scaling
+	scale = Lar.s(dim,dim,dim)
 	transl = Lar.t(rand(3)...)
 	alpha = 2*pi*rand()
 	rx = Lar.r(alpha,0,0); ry = Lar.r(0,alpha,0); rz = Lar.r(0,0,alpha)
 	rot = rx * ry * rz
 	s = Lar.Struct([ transl, scale, rot, mybox ])
-	push!(store, Lar.struct2lar(s))
+	obj = Lar.struct2lar(s)
+	vs = obj[1]
+	diagonal = LinearAlgebra.norm(vs[:,8]-vs[:,1])
+	if diagonal > 1/10
+		push!(store, obj)
+	end
 end
 
 s = Lar.Struct(store)
@@ -26,13 +30,12 @@ V,CV,FV,EV = Lar.struct2lar(s)
 GL.VIEW([ GL.GLPol(V,CV, GL.COLORS[1]) ]);
 
 
-cop_EV = Lar.coboundary_0(EV::Lar.Cells);
-cop_EW = convert(Lar.ChainOp, cop_EV);
+cop_EV = Lar.coboundary_0(EV::Lar.Cells);	# cop_EV e EV hanno gli stessi dati, ma cop_EV è una matrice sparsa
 cop_FE = Lar.coboundary_1(V, FV::Lar.Cells, EV::Lar.Cells);
 W = convert(Lar.Points, V');
 
 V, copEV, copFE, copCF = Lar.Arrangement.spatial_arrangement(
-	W::Lar.Points, cop_EW::Lar.ChainOp, cop_FE::Lar.ChainOp)
+	W::Lar.Points, cop_EV::Lar.ChainOp, cop_FE::Lar.ChainOp);
 
 
 triangulated_faces = Lar.triangulate2D(V, [copEV, copFE])

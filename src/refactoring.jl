@@ -84,11 +84,12 @@ function pointInPolygonClassification(V,EV)
         tilecode = setTile([ymax,ymin,xmax,xmin])
         count,status = 0,0
 
+		# TODO: parallelizzare il ciclo
         for (k,edge) in enumerate(EV)
             p1,p2 = V[:,edge[1]],V[:,edge[2]]
             (x1,y1),(x2,y2) = p1,p2
             c1,c2 = tilecode(p1),tilecode(p2)
-            c_edge, c_un, c_int = c1⊻c2, c1|c2, c1&c2
+            c_edge, c_un, c_int = c1⊻c2, c1|c2, c1&c2	# codici di spigolo, di unione, di intersezione
 
             if (c_edge == 0) & (c_un == 0) return "p_on"
             elseif (c_edge == 12) & (c_un == c_edge) return "p_on"

@@ -26,7 +26,7 @@ end
 """
 function frag_face(V, EV, FE, sp_idx, sigma)
 
-    vs_num = size(V, 1)
+    vs_num = size(V, 1) # V by rows
 
 	# 2D transformation of sigma face
     sigmavs = (abs.(FE[sigma:sigma,:])*abs.(EV))[1,:].nzind
@@ -141,7 +141,7 @@ function merge_vertices(V::Lar.Points, EV::Lar.ChainOp, FE::Lar.ChainOp, err=1e-
 end
 
 function spatial_arrangement_1(
-		V::Lar.Points,
+		V::Lar.Points, # by rows
 		copEV::Lar.ChainOp,
 		copFE::Lar.ChainOp, multiproc::Bool=false)
 
@@ -224,9 +224,43 @@ function spatial_arrangement(
 
 	# face subdivision
 	rV, rcopEV, rcopFE = Lar.Arrangement.spatial_arrangement_1( V, copEV, copFE, multiproc ) # copFE global
+	#@show rV; @show findnz(rcopEV); @show findnz(rcopFE);
+
 	bicon_comps = Lar.Arrangement.biconnected_components(rcopEV)
-	#W,bicon_comps = Lar.biconnectedComponent((W,EV))
+	# W,bicon_comps = Lar.biconnectedComponent((W,EV))
 	#@error "comps# = $(length(bicon_comps))"
+	check_single_non_zero_CSC(rcopFE)
+
 	# 3-complex and containment graph
+	# ricostruzione delle 3-celle
 	rV, rEV, rFE, rCF = Lar.Arrangement.spatial_arrangement_2(rV, rcopEV, rcopFE)
+end
+
+
+function check_single_non_zero_CSC(A::SparseMatrixCSC)
+	sleep_time = 5 # seconds
+	temp = 0
+	result = []
+	for i in 1:size(A,2)
+		push!(result, temp)
+		temp = 0
+		for j in 1:size(A,1)
+			temp += abs(A[j,i])
+		end
+		# println(temp)	# show column sums
+	end
+	count = 0
+	for k in result
+		if k == 1
+			count += 1
+		end
+	end
+	if count != 0
+		println("//////////////////////////////////////////////////////////////////////////////////////////////////////////")
+		println("CHECKING SINGLE NON ZERO ELEMENT")
+		println("WARNING, THE MATRIX CONTAINS $count COLUMN WITH A SINGLE NON ZERO ELEMENT")
+		println("the execution will sleep for $sleep_time seconds")
+		sleep(sleep_time)
+		println("//////////////////////////////////////////////////////////////////////////////////////////////////////////")
+	end
 end

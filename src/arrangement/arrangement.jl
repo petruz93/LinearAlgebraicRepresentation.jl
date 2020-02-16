@@ -4,8 +4,8 @@ module Arrangement
     using NearestNeighbors
     using Triangle
 	using SparseArrays
-	using LinearAlgebra    
-	using Distributed    
+	using LinearAlgebra
+	using Distributed
 	Lar = LinearAlgebraicRepresentation
 
     include("./minimal_cycles.jl")

@@ -55,6 +55,7 @@ function face_int(V::Lar.Points, EV::Lar.ChainOp, face::Lar.Cell)
         d = V[vs[j],:] - o
 
         err = 10e-8
+        # err = 10e-4
         if !(-err < d[3] < err)
 
             alpha = -o[3] / d[3]

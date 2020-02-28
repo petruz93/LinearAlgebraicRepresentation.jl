@@ -662,6 +662,7 @@ function point_in_face(point, V::Points, copEV::ChainOp)
     end
 
     return pointInPolygonClassification(V, copEV)(point) == "p_in"
+	# return pointInPolygonClassification(V, copEV)(point) != "p_out"
 end
 
 """
@@ -1009,6 +1010,7 @@ end
 			cc::Lar.ChainComplex)::Array{Any, 1}
 
 Compute a *CDT* for each face of a `ChainComplex`. Return an `Array` of triangles.
+`V` is given by rows.
 """
 function triangulate2D(V::Lar.Points, cc::Lar.ChainComplex)::Array{Any, 1}
     copEV, copFE = cc
@@ -1155,9 +1157,9 @@ end
 
 
 """
-	randomcuboids(n,scale=1.0
+	randomcuboids(n,scale=1.0)
 
-Generate the `LAR` model of a collection of `n` random cuboids.
+Generate the `LAR` model of a collection of `n` 2D random cuboids.
 Position, orientation and measure of sides are all random.
 """
 function randomcuboids(n,scale=1.0)
@@ -1175,6 +1177,12 @@ function randomcuboids(n,scale=1.0)
 	Lar.struct2lar(Lar.Struct(assembly))
 end
 
+"""
+	randomcuboids(n,scale=1.0)
+
+Generate the `LAR` model of a collection of `n` 3D random cubes.
+Position, orientation and measure of sides are all random.
+"""
 function randomcubes(n,scale=1.0)
 	assembly = []
 	for k=1:n

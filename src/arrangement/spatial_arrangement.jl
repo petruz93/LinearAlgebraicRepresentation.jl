@@ -177,9 +177,13 @@ function spatial_arrangement_1(
         end
     else
 	# sequential (iterative) processing of face fragmentation
+	println("//////////////////////////////////////////////////")
+	println("caratterisca di Eulero delle singole SIGMA:")
         for sigma in 1:fs_num
             println("\n",sigma, "/", fs_num)
             nV, nEV, nFE = Lar.Arrangement.frag_face(V, copEV, copFE, sp_idx, sigma)
+			println("//////////////////////////////////////////////////")
+			println("caratterisca di Eulero di SIGMA $sigma ---> ", Lar.euler_characteristic(nV,nEV,nFE))
 # 			v = size(nV,1); e = nEV.m; f = nFE.m
 # @show v-e+f
 # 			if v-e+f > 1
@@ -244,6 +248,11 @@ function spatial_arrangement(
 
 	# face subdivision
 	rV, rcopEV, rcopFE = Lar.Arrangement.spatial_arrangement_1( V,copEV,copFE,multiproc )
+	println("//////////////////////////////////////////////////")
+	println("caratterisca di Eulero alla fine dell'arrangement_1: ", Lar.euler_characteristic(rV, rcopEV, rcopFE))
+	println("//////////////////////////////////////////////////")
+	println("//////////////////////////////////////////////////")
+
 
 	@show rV;
 	@show findnz(rcopEV);
@@ -291,3 +300,6 @@ function check_single_non_zero_CSC(A::SparseMatrixCSC)
 		println("//////////////////////////////////////////////////////////////////////////////////////////////////////////")
 	end
 end
+
+
+cccc(FE) = [ length(findall(!iszero, FE[:,k])) for k=1:size(FE,2)]

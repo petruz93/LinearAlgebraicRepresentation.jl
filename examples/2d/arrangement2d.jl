@@ -6,10 +6,11 @@ Lar = LinearAlgebraicRepresentation
 
 
 # input generation
-V,EV = Lar.randomcuboids(60, .35)
+# V,EV = Lar.randomcuboids(60, .35)
+V,EV = Lar.randomcuboids(5)
 V = GL.normalize2(V,flag=true)
 VV = [[k] for k=1:size(V,2)]
-GL.VIEW( GL.numbering(.05)((V,[VV, EV]),GL.COLORS[1]) )
+GL.VIEW( GL.numbering(.05)((V,[VV, EV]),GL.COLORS[1]) );
 
 # subdivision of input edges
 W = convert(Lar.Points, V')

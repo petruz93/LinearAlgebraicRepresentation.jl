@@ -18,9 +18,12 @@ cop_EV = Lar.coboundary_0(EV::Lar.Cells);
 cop_FE = Lar.coboundary_1(V, FV::Lar.Cells, EV::Lar.Cells);
 W = convert(Lar.Points, V');
 
-# arrangement don't work! TODO: fix
+# arrangement don't work: it loops in minimal_3cycles! TODO: fix
 V, copEV, copFE, copCF = Lar.Arrangement.spatial_arrangement( W::Lar.Points, cop_EV::Lar.ChainOp, cop_FE::Lar.ChainOp)
 χ = Lar.euler_characteristic(W, copEV, copFE)
 
 FVs = [ [FV[k]] for k=1:length(FV)]
 GL.VIEW(GL.GLExplode(V,FVs,1.5,1.5,1.5,99, .5));
+
+EVs = [ [EV[k]] for k=1:length(EV)]
+GL.VIEW(GL.GLExplode(V,EVs,1.2,1.2,1.2,99,1));

@@ -17,8 +17,8 @@ W, copEV, copFE = Lar.planar_arrangement(W, cop_EV)
 bicon_comps = Lar.Arrangement.biconnected_components(copEV)
 
 # compute euler characteristic
-χ = Lar.euler_characteristic(W, copEV, copFE);
-println("χ = $χ ⟹   $(χ == 2)");
+χ = Lar.euler_characteristic(W, copEV, copFE)
+println("χ = $χ ; bicon_comps = $(length(bicon_comps))");
 
 # triangulation
 triangulated_faces = Lar.triangulate2D(W, [copEV, copFE]);

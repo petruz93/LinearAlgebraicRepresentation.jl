@@ -19,8 +19,9 @@ V, copEV, copFE = Lar.planar_arrangement(W, cop_EV)
 # compute containment graph of components
 bicon_comps = Lar.Arrangement.biconnected_components(copEV)
 
+# compute euler characteristic
 χ = Lar.euler_characteristic(V, copEV, copFE);
-println("χ = $χ ⟹   $(χ == 2)");
+println("χ = $χ ; bicon_comps = $(length(bicon_comps))");
 
 # visualization of component graphs
 EW = Lar.cop2lar(copEV)
@@ -38,9 +39,9 @@ FE = Lar.cop2lar(copFE);
 triangulated_faces = Lar.triangulate2D(V, [copEV, copFE])
 V = convert(Lar.Points, V')
 FVs = convert(Array{Lar.Cells}, triangulated_faces)
-GL.VIEW(GL.GLExplode(V,FVs,1.2,1.2,1.2,99,1));
+GL.VIEW(GL.GLExplode(V,FVs,1.2,1.2,1.2,99,.6));
 
 # polygonal face boundaries
 EVs = Lar.FV2EVs(copEV, copFE)
 EVs = convert(Array{Array{Array{Int64,1},1},1}, EVs)
-GL.VIEW(GL.GLExplode(V,EVs,1.2,1.2,1.2,1,1));
+GL.VIEW(GL.GLExplode(V,EVs,1.2,1.2,1.2,99,1));

@@ -25,8 +25,8 @@ cop_FE = Lar.coboundary_1(V, FV, EV);
 W = convert(Lar.Points, V');
 W, copEV, copFE, copCF = Lar.spatial_arrangement(W, cop_EV, cop_FE);
 
-χ = Lar.euler_characteristic(W, copEV, copFE);
-println("χ = $χ ⟹   $(χ == 2)");
+# compute euler characteristic
+χ = Lar.euler_characteristic(W, copEV, copFE)
 
 # triangulation
 triangulated_faces = Lar.triangulate(W, [copEV, copFE]);

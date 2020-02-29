@@ -21,14 +21,14 @@ cop_FE = Lar.coboundary_1(V, FV, EV);
 W = convert(Lar.Points, V');
 W, copEV, copFE, copCF = Lar.spatial_arrangement(W, cop_EV, cop_FE);
 
-χ = Lar.euler_characteristic(W, copEV, copFE);
-println("χ = $χ ⟹   $(χ == 2)");
+# compute euler characteristic
+χ = Lar.euler_characteristic(W, copEV, copFE)
 
 # triangulation
 triangulated_faces = Lar.triangulate(W, [copEV, copFE]);
 FVs = convert(Array{Lar.Cells}, triangulated_faces);
 V = convert(Lar.Points, W');
-GL.VIEW( GL.GLExplode(V,FVs, 2.,2.,2.,99,1) );
+GL.VIEW( GL.GLExplode(V,FVs, 2.,2.,2.,99,.6) );
 
 EVs = Lar.FV2EVs(copEV, copFE); # polygonal face fragments
 GL.VIEW( GL.GLExplode(V,EVs,1.5,1.5,1.5,99,1) );

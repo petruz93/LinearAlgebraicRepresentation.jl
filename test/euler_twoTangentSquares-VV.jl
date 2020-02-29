@@ -6,10 +6,10 @@ Lar = LinearAlgebraicRepresentation
 V, (VV,EV,FV) = Lar.cuboid([1,1], true)
 square = (V,EV)
 model = Lar.Struct([ square,
-			Lar.t(0,0.4), Lar.r(3π/4), square ])
+			Lar.r(π), square ])
 V,EV = Lar.struct2lar(model)
-
 VV = [[k] for k=1:size(V,2)]
+
 GL.VIEW( GL.numbering(.4)((V,[VV, EV]),GL.COLORS[1]) );
 
 # arrangement of input data
@@ -22,9 +22,12 @@ bicon_comps = Lar.Arrangement.biconnected_components(copEV)
 
 # compute euler characteristic
 χ = Lar.euler_characteristic(V, copEV, copFE)
+println("χ = $χ ; bicon_comps = $(length(bicon_comps))");
 
-ev = Lar.cop2lar(copEV)
-GL.VIEW( GL.numbering(.4)((V,[VV, ev]),GL.COLORS[1]) );
+EW = Lar.cop2lar(copEV)
+W = convert(Lar.Points, V')
+comps = [ GL.GLLines(W,EW[comp],GL.COLORS[(k-1)%12+1]) for (k,comp) in enumerate(bicon_comps) ];
+GL.VIEW(comps);
 
 # final solid visualization
 triangulated_faces = Lar.triangulate2D(V, [copEV, copFE])

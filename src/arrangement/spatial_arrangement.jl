@@ -261,7 +261,7 @@ function spatial_arrangement(
 	bicon_comps = Lar.Arrangement.biconnected_components(rcopEV)
 	# W,bicon_comps = Lar.biconnectedComponent((W,EV))
 	#@error "comps# = $(length(bicon_comps))"
-	check_single_non_zero_CSC(rcopFE)
+	check_odd_elements_columns_CSC(rcopFE)
 
 	# 3-complex and containment graph
 	println("******")
@@ -273,7 +273,7 @@ function spatial_arrangement(
 end
 
 
-function check_single_non_zero_CSC(A::SparseMatrixCSC)
+function check_odd_elements_columns_CSC(A::SparseMatrixCSC) #test HOMEWORK2
 	sleep_time = 5 # seconds
 	temp = 0
 	result = []
@@ -287,14 +287,14 @@ function check_single_non_zero_CSC(A::SparseMatrixCSC)
 	end
 	count = 0
 	for k in result
-		if k == 1
+		if isodd(k)
 			count += 1
 		end
 	end
 	if count != 0
 		println("//////////////////////////////////////////////////////////////////////////////////////////////////////////")
-		println("CHECKING SINGLE NON ZERO ELEMENT")
-		println("WARNING, THE MATRIX CONTAINS $count COLUMN WITH A SINGLE NON ZERO ELEMENT")
+		println("CHECKING COLUMNS WITH AN ODD NUMBER OF ELEMENTS")
+		println("WARNING, THE MATRIX CONTAINS $count COLUMN WITH AN ODD NUMBER OF ELEMENTS")
 		println("the execution will sleep for $sleep_time seconds")
 		sleep(sleep_time)
 		println("//////////////////////////////////////////////////////////////////////////////////////////////////////////")
@@ -302,4 +302,4 @@ function check_single_non_zero_CSC(A::SparseMatrixCSC)
 end
 
 
-cccc(FE) = [ length(findall(!iszero, FE[:,k])) for k=1:size(FE,2)]
+# cccc(FE) = [ length(findall(!iszero, FE[:,k])) for k=1:size(FE,2)]

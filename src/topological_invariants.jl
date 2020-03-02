@@ -9,8 +9,9 @@ function euler_characteristic(
 		copEV::Lar.ChainOp,
 		copFE::Lar.ChainOp)
 
-	χ = size(V,1) - size(copEV,1) + size(copFE,1)
-	return χ
+	# χ = size(V,1) - size(copEV,1) + size(copFE,1)
+	# return χ
+	return euler_characteristic_general(V, copEV, copFE)
 end
 
 """
